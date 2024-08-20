@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: node
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    command: sh -c "npm run dev & python3 manage.py runserver 0.0.0.0:8000"
+
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: django
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
